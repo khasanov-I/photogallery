@@ -7,7 +7,7 @@ import { UsersModule } from './users/users.module';
 import { PicturesModule } from './pictures/pictures.module';
 import { Picture } from './pictures/pictures.model';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import path from 'path';
+import * as path from 'path';
 
 @Module({
   imports: [

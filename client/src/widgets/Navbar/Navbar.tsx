@@ -1,10 +1,11 @@
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {observer} from 'mobx-react-lite'
 import './Navbar.css'
 import { useStores } from '../../store/rootStore'
 
 export const Navbar = observer(() => {
     const {userStore} = useStores()
+    const location = useLocation()
     const links = [
         {
             href: '/',
@@ -22,12 +23,12 @@ export const Navbar = observer(() => {
 
     return <div className='navbar'>
         <div className='tabs'>
-            {links.map(e => <Link key={e.content} className='tab' to={e.href}>{e.content}</Link>)}
-            {userStore.id ? <Link className='tab' to={`/profile/${userStore.id}`}>Мой профиль</Link> : undefined}
+            {links.map(e => <Link style={location.pathname === e.href ? {backgroundColor: "rgb(240, 240, 240)"} : undefined} key={e.content} className='tab' to={e.href}>{e.content}</Link>)}
+            {userStore.id ? <Link style={location.pathname === `/profile/${userStore.id}` ? {backgroundColor: "rgb(240, 240, 240)"} : undefined} className='tab' to={`/profile/${userStore.id}`}>Мой профиль</Link> : undefined}
         </div>
         {!userStore.id ? <div className='tabs'>
-            <Link className='tab' to='/login'>Авторизация</Link>
-            <Link className='tab' to='/register'>Регистрация</Link>
+            <Link style={location.pathname === '/login' ? {backgroundColor: "rgb(240, 240, 240)"} : undefined} className='tab' to='/login'>Авторизация</Link>
+            <Link style={location.pathname === '/register' ? {backgroundColor: "rgb(240, 240, 240)"} : undefined} className='tab' to='/register'>Регистрация</Link>
         </div> : undefined}
         {userStore.id ? <div className='tabs'><button className='logout-button' onClick={() => userStore.logout()}>Выйти</button></div> : undefined}
     </div>

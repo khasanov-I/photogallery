@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -33,7 +34,10 @@ export class Picture extends Model<Picture, PictureCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   webpPath: string;
 
+  @BelongsTo(() => User, { as: 'author' })
+  author: User;
+
   @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER })
+  @Column({ type: DataType.INTEGER, field: 'user_id' })
   userId: number;
 }

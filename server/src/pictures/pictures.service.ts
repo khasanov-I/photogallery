@@ -4,9 +4,11 @@ import { InjectModel } from '@nestjs/sequelize';
 import * as uuid from 'uuid';
 import * as path from 'path';
 import * as fs from 'fs';
-import sharp from 'sharp';
+import * as sharp from 'sharp';
 import { CreatePictureDto } from './dto/create-picture-dto';
 import { Sequelize } from 'sequelize-typescript';
+import { Op } from 'sequelize';
+import { User } from 'src/users/users.model';
 
 export interface MulterFile {
   fieldname: string; // Имя поля формы
@@ -50,8 +52,9 @@ export class PicturesService {
 
       fs.writeFileSync(originalFilePath, file.buffer);
 
-      return { originalFile: fileName, convertedFile: webpFilePath };
+      return { originalFile: fileName, convertedFile: webpFileName };
     } catch (e) {
+      console.log(e);
       if (webpFilePath && fs.existsSync(webpFilePath)) {
         fs.unlinkSync(webpFilePath);
       }
@@ -64,23 +67,44 @@ export class PicturesService {
 
   async createPicture(dto: CreatePictureDto) {
     const files = await this.serveFile(dto.file);
-    await this.pictureRepository.create({
+    const picture = await this.pictureRepository.create({
       name: dto.name.toLowerCase(),
       originalPath: files.originalFile,
       webpPath: files.convertedFile,
       userId: dto.userId,
     });
+    const result = await this.pictureRepository.findByPk(picture.id, {
+      include: [
+        {
+          model: User,
+          as: 'author',
+          attributes: ['name'],
+        },
+      ],
+    });
+    return result;
   }
 
   async getAll(offset: number, search: string) {
-    return await this.pictureRepository.findAndCountAll({
+    console.log(search);
+    const result = await this.pictureRepository.findAndCountAll({
       limit: 10,
       offset,
       order: [['createdAt', 'DESC']],
       where: {
-        name: search.toLowerCase(),
+        name: {
+          [Op.regexp]: search.toLowerCase(),
+        },
       },
+      include: [
+        {
+          model: User,
+          as: 'author',
+          attributes: ['name'],
+        },
+      ],
     });
+    return result.rows;
   }
 
   async changePictureName(id: number, name: string) {
@@ -105,11 +129,16 @@ export class PicturesService {
         where: { id: candidate.id },
         transaction,
       });
-      fs.unlinkSync(candidate.originalPath);
-      fs.unlinkSync(candidate.webpPath);
+      fs.unlinkSync(
+        path.resolve(__dirname, '..', '..', 'static', candidate.originalPath),
+      );
+      fs.unlinkSync(
+        path.resolve(__dirname, '..', '..', 'static', candidate.webpPath),
+      );
       await transaction.commit();
     } catch (err) {
       transaction.rollback();
+      console.log(err);
       throw new HttpException(
         'Ошибка при удалении фотографии',
         HttpStatus.INTERNAL_SERVER_ERROR,

@@ -7,17 +7,21 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PicturesService } from './pictures.service';
 import { CreatePictureDto } from './dto/create-picture-dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('pictures')
 export class PicturesController {
   constructor(private pictureService: PicturesService) {}
 
+  @UseInterceptors(FileInterceptor('file'))
   @Post('/create')
-  async register(@Body() dto: CreatePictureDto) {
-    await this.pictureService.createPicture(dto);
+  async create(@Body() dto: CreatePictureDto, @UploadedFile() file) {
+    return await this.pictureService.createPicture({ ...dto, file });
   }
 
   @Get('')

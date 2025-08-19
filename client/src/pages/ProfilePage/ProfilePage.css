@@ -12,3 +12,15 @@
 .input {
     width: 60%;
 }
+
+@media (max-width: 600px) {
+    .image-list {
+        column-count: 2 !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .image-list {
+        column-count: 1 !important;
+    }
+}

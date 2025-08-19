@@ -1,0 +1,14 @@
+.modal-container {
+    width: 500px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+.MuiBackdrop-root {
+    opacity: 0.3 !important;
+}
