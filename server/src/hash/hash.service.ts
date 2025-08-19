@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
 import { syncScrypt } from 'scrypt-js';
 
 @Injectable()
 export class HashService {
   async hashPassword(password: string, salt?: string) {
-    const saltBuf = salt ? Buffer.from(salt, 'hex') : crypto.randomBytes(16);
+    const saltBuf = salt ? Buffer.from(salt, 'hex') : randomBytes(16);
 
     const N = 16384,
       r = 8,

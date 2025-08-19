@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './users.model';
-import { AuthDto, CreateUserDto } from './dto/create-user-dto';
+import { AuthDto, CreateUserDto, UpdateUserDto } from './dto/create-user-dto';
 import { HashService } from 'src/hash/hash.service';
 
 @Injectable()
@@ -65,5 +65,27 @@ export class UsersService {
   async getUserById(id: number) {
     const user = await this.userRepository.findByPk(id);
     return { id: user.id, name: user.name };
+  }
+
+  async changeUserData(dto: UpdateUserDto) {
+    const candidate = await this.userRepository.findOne({
+      where: { mail: dto.mail },
+    });
+    if (candidate) {
+      throw new HttpException(
+        'Пользователь с таким mail уже существует',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const hash = await this.hashService.hashPassword(dto.password);
+    await this.userRepository.update(
+      {
+        name: dto.name,
+        mail: dto.mail,
+        passwordHash: hash.hash,
+        passwordSalt: hash.salt,
+      },
+      { where: { id: dto.id } },
+    );
   }
 }

@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { Picture } from 'src/pictures/pictures.model';
 
 type UserCreationAttrs = {
   mail: string;
@@ -28,4 +29,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @Column({ type: DataType.STRING, allowNull: false })
   passwordSalt: string;
+
+  @HasMany(() => Picture)
+  pictures: Picture[];
 }

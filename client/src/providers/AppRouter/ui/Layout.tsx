@@ -10,6 +10,8 @@ export const Layout = memo((props: LayoutProps): JSX.Element => {
 
     return <>
         <Navbar />
-        <Outlet />
+        <div className='content-page'>
+            <Outlet />
+        </div>
     </>;
 });

@@ -29,5 +29,6 @@ export const Navbar = observer(() => {
             <Link className='tab' to='/login'>Авторизация</Link>
             <Link className='tab' to='/register'>Регистрация</Link>
         </div> : undefined}
+        {userStore.id ? <div className='tabs'><button className='logout-button' onClick={() => userStore.logout()}>Выйти</button></div> : undefined}
     </div>
 })

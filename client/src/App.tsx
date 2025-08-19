@@ -4,7 +4,7 @@ import { AppRouter } from './providers/AppRouter/ui/AppRouter';
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <Suspense>
         <AppRouter />
       </Suspense>

@@ -22,3 +22,15 @@
 .tab:hover {
     background-color: rgb(240, 240, 240);
 }
+
+.logout-button {
+    background-color: white;
+    color: rgb(42, 42, 42);
+    border: none;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: rgb(240, 240, 240);
+}
