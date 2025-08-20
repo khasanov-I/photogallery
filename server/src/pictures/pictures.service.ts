@@ -68,7 +68,7 @@ export class PicturesService {
   async createPicture(dto: CreatePictureDto) {
     const files = await this.serveFile(dto.file);
     const picture = await this.pictureRepository.create({
-      name: dto.name.toLowerCase(),
+      name: dto.name,
       originalPath: files.originalFile,
       webpPath: files.convertedFile,
       userId: dto.userId,
@@ -85,25 +85,47 @@ export class PicturesService {
     return result;
   }
 
-  async getAll(offset: number, search: string) {
-    console.log(search);
-    const result = await this.pictureRepository.findAndCountAll({
-      limit: 10,
-      offset,
-      order: [['createdAt', 'DESC']],
-      where: {
-        name: {
-          [Op.regexp]: search.toLowerCase(),
+  async getAll(offset: number, search: string, id?: string) {
+    let result;
+    if (id) {
+      result = await this.pictureRepository.findAndCountAll({
+        limit: 10,
+        offset,
+        order: [['createdAt', 'DESC']],
+        where: {
+          name: {
+            [Op.iRegexp]: search,
+          },
+          userId: Number(id),
         },
-      },
-      include: [
-        {
-          model: User,
-          as: 'author',
-          attributes: ['name'],
+        include: [
+          {
+            model: User,
+            as: 'author',
+            attributes: ['name', 'id'],
+          },
+        ],
+      });
+    } else {
+      result = await this.pictureRepository.findAndCountAll({
+        limit: 10,
+        offset,
+        order: [['createdAt', 'DESC']],
+        where: {
+          name: {
+            [Op.iRegexp]: search,
+          },
         },
-      ],
-    });
+        include: [
+          {
+            model: User,
+            as: 'author',
+            attributes: ['name', 'id'],
+          },
+        ],
+      });
+    }
+
     return result.rows;
   }
 

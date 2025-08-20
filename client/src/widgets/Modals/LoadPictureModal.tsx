@@ -4,6 +4,7 @@ import { useStores } from "../../store/rootStore"
 import { observer } from "mobx-react-lite"
 import { ChangeEvent, useCallback, useRef, useState } from "react"
 import { Picture } from "../../types/types"
+import "./styles.css"
 
 export const LoadPictureModal = observer(({ addPhoto, setAddPhoto, setPictures, pictures}: {
     addPhoto: boolean,

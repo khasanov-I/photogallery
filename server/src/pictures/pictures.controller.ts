@@ -25,8 +25,14 @@ export class PicturesController {
   }
 
   @Get('')
-  async getAll(@Query() query: { offset: number; search: string }) {
-    return await this.pictureService.getAll(query.offset, query.search);
+  async getAll(
+    @Query() query: { offset: number; search: string; id?: string },
+  ) {
+    return await this.pictureService.getAll(
+      query.offset,
+      query.search,
+      query.id,
+    );
   }
 
   @Patch('/changeName')

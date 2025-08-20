@@ -1,0 +1,26 @@
+.modal-container {
+    width: 500px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+.input {
+    width: 60%;
+}
+
+@media (max-width: 600px) {
+    .image-list {
+        column-count: 2 !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .image-list {
+        column-count: 1 !important;
+    }
+}

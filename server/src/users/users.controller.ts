@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthDto, CreateUserDto, UpdateUserDto } from './dto/create-user-dto';
 
@@ -19,5 +19,10 @@ export class UsersController {
   @Patch('/update_user')
   async changeUserData(@Body() dto: UpdateUserDto) {
     await this.usersService.changeUserData(dto);
+  }
+
+  @Get()
+  async getAll(@Query() query: { name: string }) {
+    return await this.usersService.getAllUsersWithFilter(query.name);
   }
 }

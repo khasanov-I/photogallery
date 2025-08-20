@@ -6,5 +6,6 @@ export type Picture = {
     userId: number;
     author: {
         name: string
+        id: number
     }
 }

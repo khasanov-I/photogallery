@@ -103,7 +103,7 @@ export class PictureStore {
     }
   }
 
-  async getAll(offset: number, search: string) {
+  async getAll(offset: number, search: string, id?: string) {
       this.error = ''
       this.isListEmpty = false
       if (offset === 0) {
@@ -112,7 +112,8 @@ export class PictureStore {
       try {
         const response = await api.get('/pictures', {params: {
             offset,
-            search
+            search,
+            id
         }})
         if (response.data.length === 0) {
             runInAction(() => {

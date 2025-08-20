@@ -4,6 +4,7 @@ import { Picture } from "../../types/types"
 import { useCallback } from "react"
 import { useStores } from "../../store/rootStore"
 import { observer } from "mobx-react-lite"
+import "./styles.css"
 
 export const OpenedPictureModal = observer(({ pictureOpened, setPictureOpened, pictures }: {
     pictureOpened: undefined | { idx: number } & Picture,
@@ -56,8 +57,8 @@ export const OpenedPictureModal = observer(({ pictureOpened, setPictureOpened, p
                 alt={pictureOpened?.name}
                 loading="lazy"
                 style={{
-                    width: "100%",
-                    height: "auto",
+                    maxWidth: "100%",
+                    maxHeight: "90vh",
                 }}
             />
             <ImageListItemBar

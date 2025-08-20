@@ -2,6 +2,7 @@ import { Button, Modal, TextField } from "@mui/material"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../store/rootStore"
 import { useCallback, useState } from "react"
+import "./styles.css"
 
 export const ChangeUserDataModal = observer(({ setEdit, edit }: {
     edit: boolean,

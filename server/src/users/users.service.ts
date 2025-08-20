@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './users.model';
 import { AuthDto, CreateUserDto, UpdateUserDto } from './dto/create-user-dto';
 import { HashService } from 'src/hash/hash.service';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UsersService {
@@ -57,7 +58,11 @@ export class UsersService {
 
   async getAllUsersWithFilter(name: string) {
     const users = await this.userRepository.findAll({
-      where: { $name$: name },
+      where: {
+        name: {
+          [Op.iRegexp]: name,
+        },
+      },
     });
     return users.map((e) => ({ id: e.id, name: e.name }));
   }
