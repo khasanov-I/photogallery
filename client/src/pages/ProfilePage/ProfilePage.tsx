@@ -31,7 +31,7 @@ const ProfilePage = observer((): JSX.Element => {
             </div> : undefined}
             <ChangeUserDataModal edit={edit} setEdit={setEdit} />
             <LoadPictureModal pictures={pictures} setPictures={setPictures} setAddPhoto={setAddPhoto} addPhoto={addPhoto} />
-            <PicturesGrid id={id}/>
+            <PicturesGrid pictures={pictures} setPictures={setPictures} id={id}/>
         </div>
     );
 });

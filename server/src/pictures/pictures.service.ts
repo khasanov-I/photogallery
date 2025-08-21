@@ -87,6 +87,7 @@ export class PicturesService {
 
   async getAll(offset: number, search: string, id?: string) {
     let result;
+    console.log(search);
     if (id) {
       result = await this.pictureRepository.findAndCountAll({
         limit: 10,

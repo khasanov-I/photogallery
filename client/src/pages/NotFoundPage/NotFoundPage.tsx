@@ -5,7 +5,7 @@ interface NotFoundPageProps {}
 const NotFoundPage = ({}: NotFoundPageProps): JSX.Element => {
     return (
         <div>
-
+            Страница не найдена
         </div>
     );
 };

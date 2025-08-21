@@ -8,7 +8,8 @@ import { Picture } from "../../types/types"
 import { __API__ } from "../../api/api"
 import "./styles.css"
 
-export const PicturesGrid = observer(({id}: {id?: string}) => {
+export const PicturesGrid = observer(({ id, name = "", offs = 0, pictures, setPictures}: 
+    { id?: string, pictures: Picture[], setPictures: React.Dispatch<React.SetStateAction<Picture[]>>, name?: string, offs?: number}) => {
 
     const { userStore, pictureStore } = useStores()
 
@@ -19,8 +20,6 @@ export const PicturesGrid = observer(({id}: {id?: string}) => {
 
     const [offset, setOffset] = useState(10)
 
-    const [pictures, setPictures] = useState<Picture[]>([])
-
     const deleteHandler = useCallback((id: number) => async () => {
         await pictureStore.deletePicture(id)
         const newPictures = [...pictures].filter(e => e.id !== id)
@@ -28,28 +27,33 @@ export const PicturesGrid = observer(({id}: {id?: string}) => {
     }, [pictureStore, pictures])
 
     const loadMorePictures = useCallback(async (offset: number, id?: string) => {
-        const result = await pictureStore.getAll(offset, '', id);
+        const result = await pictureStore.getAll(offset, name, id);
         if (result.length < 10) {
             setCanLoadMore(false)
         }
         setPictures(prev => [...prev, ...result]);
-    }, [pictureStore])
+    }, [name, pictureStore])
 
     useEffect(() => {
         const loadPictures = async (id?: string) => {
-            const result = await pictureStore.getAll(0, '', id);
+            const result = await pictureStore.getAll(offs, name, id);
             if (result.length < 10) {
                 setCanLoadMore(false)
             }
             setPictures(result);
         };
         loadPictures(id);
-    }, [id, pictureStore, userStore.id]);
+        return () => {
+            setCanLoadMore(true)
+            setOffset(10)
+        }
+    }, [id, name, offs, pictureStore, userStore.id]);
 
     return <div style={{
         display: "flex",
         flexDirection: "column",
         width: "100%",
+        height: "100%"
     }}>
         {pictureStore.isLoading
             ? <div style={{ display: "flex", height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>Загрузка...</div> :
@@ -82,7 +86,7 @@ export const PicturesGrid = observer(({id}: {id?: string}) => {
                 ))}
             </ImageList>
         }
-        {!canLoadMore && offset === 0 && pictures.length === 0 ?
+        {!canLoadMore && offset === 10 && pictures.length === 0 ?
             <div style={{ display: "flex", height: "100%", width: "100%", alignItems: "center", justifyContent: "center" }}>Фотографии не найдены</div>
             : <div style={{ paddingBottom: "20px", width: "100%", display: "flex", justifyContent: "center" }}>
                 {canLoadMore ? <Button onClick={async () => {

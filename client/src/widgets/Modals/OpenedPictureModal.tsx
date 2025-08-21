@@ -1,4 +1,4 @@
-import { Button, ImageListItem, ImageListItemBar, Modal } from "@mui/material"
+import { Button, ImageListItem, ImageListItemBar, Link, Modal } from "@mui/material"
 import { __API__ } from "../../api/api"
 import { Picture } from "../../types/types"
 import { useCallback } from "react"
@@ -43,11 +43,11 @@ export const OpenedPictureModal = observer(({ pictureOpened, setPictureOpened, p
                 <Button onClick={() => setPictureOpened(undefined)}>Закрыть</Button>
                 <div>
                     {pictures.findIndex(e => e.id === pictureOpened?.id) !== 0
-                        ? <Button onClick={onChangeOpenedPicture("left")}>
+                        ? <Button className="but" onClick={onChangeOpenedPicture("left")}>
                             {"<"}
                         </Button> : undefined}
                     {pictures.findIndex(e => e.id === pictureOpened?.id) !== pictures.length - 1
-                        ? <Button onClick={onChangeOpenedPicture("right")}>
+                        ? <Button className="but" onClick={onChangeOpenedPicture("right")}>
                             {">"}
                         </Button> : undefined}
                 </div>
@@ -63,7 +63,7 @@ export const OpenedPictureModal = observer(({ pictureOpened, setPictureOpened, p
             />
             <ImageListItemBar
                 title={pictureOpened?.name}
-                subtitle={pictureOpened?.author.name}
+                subtitle={<Link href={`/profile/${pictureOpened?.author.id}`}>{`@${pictureOpened?.author.name}`}</Link>}
             />
         </ImageListItem>
     </Modal>
