@@ -24,7 +24,7 @@ export const PicturesGrid = observer(({ id, name = "", offs = 0, pictures, setPi
         await pictureStore.deletePicture(id)
         const newPictures = [...pictures].filter(e => e.id !== id)
         setPictures(newPictures)
-    }, [pictureStore, pictures])
+    }, [pictureStore, pictures, setPictures])
 
     const loadMorePictures = useCallback(async (offset: number, id?: string) => {
         const result = await pictureStore.getAll(offset, name, id);
@@ -32,7 +32,7 @@ export const PicturesGrid = observer(({ id, name = "", offs = 0, pictures, setPi
             setCanLoadMore(false)
         }
         setPictures(prev => [...prev, ...result]);
-    }, [name, pictureStore])
+    }, [name, pictureStore, setPictures])
 
     useEffect(() => {
         const loadPictures = async (id?: string) => {
@@ -47,7 +47,7 @@ export const PicturesGrid = observer(({ id, name = "", offs = 0, pictures, setPi
             setCanLoadMore(true)
             setOffset(10)
         }
-    }, [id, name, offs, pictureStore, userStore.id]);
+    }, [id, name, offs, pictureStore, setPictures, userStore.id]);
 
     return <div style={{
         display: "flex",
